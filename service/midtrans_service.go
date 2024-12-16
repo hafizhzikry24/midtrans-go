@@ -7,5 +7,5 @@ import (
 )
 
 type MidtransService interface {
-	Create(c *gin.Context, request web.MidtransRequest) web.MidtransRequest
+	Create(c *gin.Context, request web.MidtransRequest) web.MidtransResponse
 }
