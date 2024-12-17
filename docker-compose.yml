@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  midtrans-go-app:
+    build: .
+    ports:
+      - "8002:8002" 
+    environment:
+      - ENV_FILE_PATH=.env  
+    networks:
+      - midtrans-network
+    volumes:
+      - ./.env:/root/.env  
+
+networks:
+  midtrans-network:
+    driver: bridge
