@@ -34,3 +34,25 @@ func (controller *MidtransControllerImpl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, webResponse)
 }
+
+func (controller *MidtransControllerImpl) CheckStatus(c *gin.Context) {
+	orderID := c.Param("order_id")
+
+	// Dapatkan transaksi berdasarkan orderID
+	transaction, err := controller.MidtransService.GetTransactionByOrderID(orderID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Transaction not found"})
+		return
+	}
+
+	paymentStatus, err := controller.MidtransService.GetPaymentStatusByTransactionID(transaction.ID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Payment status not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"orderID": orderID,
+		"status":  paymentStatus.Status,
+	})
+}

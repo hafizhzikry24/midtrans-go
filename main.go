@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"midtrans-go/controller"
 	"midtrans-go/initializer"
 	"midtrans-go/middleware"
@@ -15,8 +16,14 @@ func init() {
 }
 
 func main() {
+
+	db, err := initializer.ConnectDB()
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
 	validate := validator.New()
-	midtransService := service.NewMidtransServiceImpl(validate)
+	midtransService := service.NewMidtransServiceImpl(validate, db)
 	midtransController := controller.NewMidtransControllerImpl(midtransService)
 
 	router := gin.Default()
@@ -24,6 +31,8 @@ func main() {
 	midtrans := router.Group("/midtrans")
 	{
 		midtrans.POST("/create", midtransController.Create)
+		midtrans.GET("/status/:orderID", midtransController.CheckStatus)
+
 	}
 	router.Run()
 }
