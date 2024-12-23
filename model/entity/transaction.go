@@ -5,7 +5,7 @@ import "time"
 type Transaction struct {
 	ID          uint   `gorm:"primaryKey"`
 	OrderID     string `gorm:"unique"`
-	UserID      int
+	UserID      int    `gorm:"foreignKey:UserID"`
 	ItemID      string
 	ItemName    string
 	Amount      int64
@@ -13,4 +13,5 @@ type Transaction struct {
 	RedirectUrl string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	User        User `gorm:"foreignKey:UserID"`
 }

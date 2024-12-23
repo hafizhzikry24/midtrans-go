@@ -26,6 +26,9 @@ func main() {
 	midtransService := service.NewMidtransServiceImpl(validate, db)
 	midtransController := controller.NewMidtransControllerImpl(midtransService)
 
+	userService := service.NewUserServiceImpl(validate, db)
+	userController := controller.NewUserControllerImpl(*userService)
+
 	router := gin.Default()
 	router.Use(middleware.ErrorHandle())
 	midtrans := router.Group("/midtrans")
@@ -33,6 +36,12 @@ func main() {
 		midtrans.POST("/create", midtransController.Create)
 		midtrans.GET("/status/:orderID", midtransController.CheckStatus)
 
+	}
+
+	user := router.Group("/users")
+	{
+		user.POST("/create", userController.CreateUser)
+		user.GET("/:id", userController.GetUserWithTransaction)
 	}
 	router.Run()
 }

@@ -25,9 +25,9 @@ func ConnectDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&entity.Transaction{}, &entity.PaymentStatus{})
+	err = db.AutoMigrate(&entity.User{}, &entity.Transaction{}, &entity.PaymentStatus{})
 	if err != nil {
-		return nil, err
+		log.Fatal("Error during AutoMigrate:", err)
 	}
 
 	return db, nil
